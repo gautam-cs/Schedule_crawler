@@ -1,0 +1,4 @@
+Images/*
+.idea/*
+*.log
+__pycache__/*
