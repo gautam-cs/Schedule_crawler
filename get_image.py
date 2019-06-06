@@ -1,10 +1,15 @@
 import os
+# import psutil
 import traceback
 from datetime import datetime
 
 import requests
 from lxml import html
 import logging
+
+from requests import ConnectTimeout, ReadTimeout
+
+timeout = 60 * 1  # 1 minute
 
 log_folder = '{}/logs'.format(os.getcwd())
 if not os.path.exists(log_folder):
@@ -28,7 +33,9 @@ class Image:
         :return:
         """
         try:
-            response = requests.get('https://c.xkcd.com/random/comic/')
+            # process = psutil.Process(os.getpid())
+            # process.wait(timeout=timeout)
+            response = requests.get('https://c.xkcd.com/random/comic/', timeout=timeout)
             tree = html.fromstring(response.content)
             image_src = tree.xpath('//*[@id="comic"]/img/@src')
             image_name = image_src[0].split('/')[-1]
@@ -42,6 +49,14 @@ class Image:
                 self.retry += 1
                 logging.info('retrying {} times'.format(self.retry))
                 self.get_image()
+        # except psutil.TimeoutExpired:
+        #     logging.error('killing process due to timeout')
+        #     process.kill()
+        #     raise RuntimeError('Timeout')
+        except ConnectTimeout:
+            raise ConnectTimeout('Timeout exceeded')
+        except ReadTimeout:
+            raise ReadTimeout(' timeout error')
         except Exception as err:
             logging.error('image downloading failed after {} retry with error: {}'.format(self.retry, str(err)))
             traceback.print_tb(err.__traceback__)
