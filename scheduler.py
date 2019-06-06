@@ -12,5 +12,5 @@ def get_memes_imag():
 
 
 scheduler = BlockingScheduler()
-scheduler.add_job(get_memes_imag, 'interval', minutes=0.2)
+scheduler.add_job(get_memes_imag, 'interval', minutes=1)
 scheduler.start()
