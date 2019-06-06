@@ -23,6 +23,10 @@ class Image:
         pass
 
     def get_image(self):
+        """
+        helps in getting random htmls of memes pages and extracting random image from it
+        :return:
+        """
         try:
             response = requests.get('https://c.xkcd.com/random/comic/')
             tree = html.fromstring(response.content)
@@ -44,6 +48,12 @@ class Image:
 
     @staticmethod
     def store_image(image_name, image_content):
+        """
+        takes the image data and it stores it in some defined directory
+        :param image_name:
+        :param image_content:
+        :return:
+        """
         dir_path = os.getcwd()
         base_folder = '{}/Images'.format(dir_path)
         if not os.path.exists(base_folder):
