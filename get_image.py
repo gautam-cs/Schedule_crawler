@@ -6,7 +6,11 @@ import requests
 from lxml import html
 import logging
 
-logging.basicConfig(filename='logs/image_{}.log'.format(datetime.now().date()), level=logging.DEBUG)
+log_folder = '{}/logs'.format(os.getcwd())
+if not os.path.exists(log_folder):
+    os.mkdir(log_folder)
+logging.basicConfig(filename='{log_folder}/Image_{date}.log'.format(log_folder=log_folder, date=datetime.now().date()),
+                    level=logging.DEBUG)
 
 
 class Image:
